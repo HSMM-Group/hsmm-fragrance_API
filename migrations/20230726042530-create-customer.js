@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      customerName: {
+      name: {
         type: Sequelize.STRING
       },
       phone: {

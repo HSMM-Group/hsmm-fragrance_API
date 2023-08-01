@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Currency.init({
-    currencyName: DataTypes.STRING,
+    name: DataTypes.STRING,
     rate: DataTypes.DOUBLE
   }, {
     sequelize,

@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 const sh = require("./shared")
 const Categories = require('../models/category')(sequelize, DataTypes);
 
-router.get('/category/get', async(req, res) =>{
+router.get('/category', async(req, res) =>{
     try{
         const findAll = await Categories.findAll({order:[["id","DESC"]]})
         res.status(200).json(resData(true,'Get category successfully.', findAll));
@@ -15,18 +15,18 @@ router.get('/category/get', async(req, res) =>{
     }
 })
 
-router.post('/category/add', sh.uploadImage().single('file'), async(req, res) =>{
-    try{
-        const {image, categoryName, description} = req.body;
-        if(!(categoryName)){
+router.post('/category', sh.uploadImage().single('file'), async(req, res) =>{
+    try{ 
+        const {image, name, description} = req.body;
+        if(!(name)){
             return res.status(400).json(resData(false, 'Category Name is required.', null));
         }
-        const findCate = await Categories.findOne({where:{categoryName: categoryName}});
+        const findCate = await Categories.findOne({where:{name: name}});
         if(findCate){
             return res.status(400).json(resData(false, 'There is already a category.', null));
         }
         const addCate = await Categories.create({
-            categoryName: categoryName,
+            name: name,
             description: description,
             image: image
         })
@@ -36,19 +36,19 @@ router.post('/category/add', sh.uploadImage().single('file'), async(req, res) =>
     }
 })
 
-router.put('/category/update', sh.uploadImage().single('file'), async(req, res) =>{
+router.put('/category', sh.uploadImage().single('file'), async(req, res) =>{
     try{
-        const {id, image, categoryName, description} = req.body;
-        if(!(categoryName)){
+        const {id, image, name, description} = req.body;
+        if(!(name)){
             return res.status(400).json(resData(false, 'Category Name is required.', null));
         }
-        const findCateName = await Categories.findOne({where:{categoryName: categoryName}});
+        const findCateName = await Categories.findOne({where:{name: name}});
         if(findCateName && findCateName.id != id){
             return res.status(400).json(resData(false, 'There is already a category.', null));
         }
         const updateCate = await Categories.update(
             {
-                categoryName: categoryName,
+                name: name,
                 description: description,
                 image: image
             },
