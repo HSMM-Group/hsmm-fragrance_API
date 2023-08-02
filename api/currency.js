@@ -8,8 +8,14 @@ const Currencies = require('../models/currency')(sequelize, DataTypes);
 
 router.get('/currency', async(req, res) =>{
     try{
-        const findAll = await Currencies.findAll({order:[["id","DESC"]]})
-        res.status(200).json(resData(true,'Get category successfully.', findAll));
+        const { kw, count, skip } = req.query;
+        const findAll = await Currencies.findAndCountAll({
+            where: { name: { [Op.substring]: kw || '' } },
+            order: [["id", "DESC"]],
+            offset: Number(skip) * Number(count),
+            limit: Number(count),
+        })
+        res.status(200).json(resData(true, 'Get category successfully.', findAll.rows, findAll.count));
     }catch (err){
         res.status(500).json(resData(false, err.message, null));
     }

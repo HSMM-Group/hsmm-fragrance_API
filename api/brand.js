@@ -8,8 +8,14 @@ const Brand = require('../models/brand')(sequelize, DataTypes);
 
 router.get('/brand', async(req, res) =>{
     try{
-        const findAll = await Brand.findAll({order:[["id","DESC"]]})
-        res.status(200).json(resData(true,'Get brand successfully.', findAll));
+        const { kw, count, skip } = req.query;
+        const findAll = await Brand.findAndCountAll({
+            where: { name: { [Op.substring]: kw || '' } },
+            order: [["id", "DESC"]],
+            offset: Number(skip) * Number(count),
+            limit: Number(count) > 0?Number(count):null,
+        })
+        res.status(200).json(resData(true, 'Get brand successfully.', findAll.rows, findAll.count));
     }catch (err){
         res.status(500).json(resData(false, err.message, null));
     }

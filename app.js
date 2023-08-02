@@ -33,10 +33,11 @@ app.use(
 // app.use(helmet());
 app.use(express.json());
 
-global.resData = function resData(status, message, data) {
+global.resData = function resData(status, message, data, count) {
   let resData = {
     status : status,
     message: message,
+    totalCount: count | 0,
     data : data
   }
   return resData
