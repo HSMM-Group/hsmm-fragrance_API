@@ -9,7 +9,7 @@ const Stocks = require('../models/stock')(sequelize, DataTypes);
 const Brands = require('../models/brand')(sequelize, DataTypes);
 const Categories = require('../models/category')(sequelize, DataTypes);
 const Currencies = require('../models/currency')(sequelize, DataTypes);
-
+ 
 Brands.hasOne(Products, { foreignKey: "brandId" });
 Products.belongsTo(Brands, { foreignKey: "brandId" });
 Categories.hasOne(Products, { foreignKey: "categoryId" });
@@ -22,7 +22,13 @@ router.get('/product', async (req, res) => {
     try {
         const { kw, count, skip } = req.query;
         const findAll = await Products.findAndCountAll({
-            where: { name: { [Op.substring]: kw || '' } },
+            where: {
+                [Op.or]:[
+                    {id: { [Op.substring]: kw || '' }},
+                    {name: { [Op.substring]: kw || '' }},
+                    // {barcode: {[Op.substring]: kw || ''}}
+                ]
+            },
             include: [
                 { model: Brands, attributes: ['id', 'name'] },
                 { model: Categories, attributes: ['id', 'name'] },
@@ -31,7 +37,7 @@ router.get('/product', async (req, res) => {
             ],
             order: [["id", "DESC"]],
             offset: Number(skip) * Number(count),
-            limit: Number(count),
+            limit: Number(count) > 0?Number(count):null,
         })
         res.status(200).json(resData(true, 'Get product successfully.', findAll.rows, findAll.count));
     } catch (err) {
@@ -56,20 +62,10 @@ router.get('/product/byid', async (req, res) => {
 })
 router.post('/product', sh.uploadImage().single('file'), async (req, res) => {
     try {
-        const {
-            name,
-            brandId,
-            categoryId,
-            stock,
-            price,
-            currencyId,
-            barcode,
-            status,
-            coverImage
-        } = req.body;
+        const {name,brandId,categoryId,stock,price,currencyId,barcode,status,coverImage} = req.body;
 
-        if (!(name)) {
-            return res.status(400).json(resData(false, 'Product Name is required.', null));
+        if (!(name && brandId && categoryId)) {
+            return res.status(400).json(resData(false, 'Input is required.', null));
         }
         const findProd = await Products.findOne({ where: { name: name } });
         if (findProd) {
@@ -100,29 +96,16 @@ router.post('/product', sh.uploadImage().single('file'), async (req, res) => {
 
 router.put('/product', sh.uploadImage().single('file'), async (req, res) => {
     try {
-        const {
-            id,
-            name,
-            brandId,
-            categoryId,
-            stock,
-            price,
-            currencyId,
-            barcode,
-            status,
-            coverImage
-        } = req.body;
+        const {id,name,brandId,categoryId,stock,price,currencyId,barcode,status,coverImage} = req.body;
 
-        if (!(name)) {
-            return res.status(400).json(resData(false, 'Product Name is required.', null));
+        if (!(name && brandId && categoryId)) {
+            return res.status(400).json(resData(false, 'Input is required.', null));
         }
         const findName = await Products.findOne({ where: { name: name } });
         if (findName && findName.id != id) {
             return res.status(400).json(resData(false, 'There is already a product name.', null));
         }
-        
         let findProd = await Products.findOne({where:{id: id}, include:[{model: Stocks}]})
-
         findProd.name = name;
         findProd.brandId = brandId;
         findProd.categoryId = categoryId;

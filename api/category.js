@@ -13,7 +13,7 @@ router.get('/category', async (req, res) => {
             where: { name: { [Op.substring]: kw || '' } },
             order: [["id", "DESC"]],
             offset: Number(skip) * Number(count),
-            limit: Number(count),
+            limit: Number(count) > 0?Number(count):null,
         })
         res.status(200).json(resData(true, 'Get category successfully.', findAll.rows, findAll.count));
     } catch (err) {
