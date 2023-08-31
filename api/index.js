@@ -7,6 +7,7 @@ const product = require("./product");
 const customer = require("./customer");
 const country = require("./country");
 const invoice = require("./invoice");
+const employee = require("./employee");
 
 router.use(user);
 router.use(category);
@@ -16,5 +17,6 @@ router.use(product);
 router.use(customer);
 router.use(country);
 router.use(invoice);
+router.use(employee);
 
 module.exports = router;

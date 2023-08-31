@@ -12,10 +12,14 @@ const sequelize = new Sequelize(
     operatorsAliases: 0,
     logging: true,
     dialectOptions: {
+      useUTC: false, //for reading from database
+      dateStrings: true,
+      typeCast: true,
       options: {
         encrypt: false,
       },
     },
+    timezone:process.env.TIME_ZONE
   }
 );
 (async () => {

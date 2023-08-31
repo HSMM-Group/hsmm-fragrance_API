@@ -30,14 +30,29 @@ module.exports = {
       discountAmount: {
         type: Sequelize.DOUBLE
       },
-      vat: {
+      tax: {
         type: Sequelize.DOUBLE
+      },
+      taxAmount: {
+        type: Sequelize.DOUBLE
+      },
+      totalAmount: {
+        type: Sequelize.DOUBLE
+      },
+      saleNote: {
+        type: Sequelize.STRING
       },
       cashierId: {
         type: Sequelize.INTEGER
       },
       status: {
         type: Sequelize.INTEGER
+      },
+      cancelBy: {
+        type: Sequelize.INTEGER
+      },
+      cancelNote: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

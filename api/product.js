@@ -26,7 +26,7 @@ router.get('/product', async (req, res) => {
                 [Op.or]:[
                     {id: { [Op.substring]: kw || '' }},
                     {name: { [Op.substring]: kw || '' }},
-                    // {barcode: {[Op.substring]: kw || ''}}
+                    {barcode: {[Op.substring]: kw || ''}}
                 ]
             },
             include: [

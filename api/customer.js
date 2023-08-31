@@ -12,7 +12,7 @@ router.get('/customer', async (req, res) => {
         const findAll = await Customers.findAndCountAll({
             where: {
                 [Op.or]:[
-                    {id: { [Op.substring]: kw || '' }},
+                    {phone: { [Op.substring]: kw || '' }},
                     {name: { [Op.substring]: kw || '' }},
                 ]
             },

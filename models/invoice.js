@@ -21,9 +21,14 @@ module.exports = (sequelize, DataTypes) => {
     cardAmount: DataTypes.DOUBLE,
     discountPercent: DataTypes.DOUBLE,
     discountAmount: DataTypes.DOUBLE,
-    vat: DataTypes.DOUBLE,
+    tax: DataTypes.DOUBLE,
+    taxAmount: DataTypes.DOUBLE,
+    totalAmount: DataTypes.DOUBLE,
+    saleNote: DataTypes.STRING,
     cashierId: DataTypes.INTEGER,
-    status: DataTypes.INTEGER
+    status: DataTypes.INTEGER,
+    cancelBy: DataTypes.INTEGER,
+    cancelNote: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Invoice',

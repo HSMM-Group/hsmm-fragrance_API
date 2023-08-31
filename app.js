@@ -42,14 +42,15 @@ global.resData = function resData(status, message, data, count) {
   }
   return resData
 }
-app.get("/", (req, res) => {
-  res.json({
-    message: "🦄🌈✨👋🌎🌍🌏✨🌈🦄",
-  });
-});
-
+// app.get("/", (req, res) => {
+//   res.json({
+//     message: "🦄🌈✨👋🌎🌍🌏✨🌈🦄",
+//   });
+// });
+app.use(express.static("fragance-ui"));
 const rootPath = path.join(__dirname, '/images');
 app.use('/files', express.static(rootPath));
+
 
 // app.use('/api', passport.authenticate("jwt", { session: false }), api);
 app.use('/api', api);

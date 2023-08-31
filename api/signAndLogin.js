@@ -49,7 +49,7 @@ router.post('/login', async(req, res) => {
         if(!(userName && password)){
             return res.status(400).send("All input is required.");
         }
-        let findUser = await Users.findOne({where:{userName: userName.toLowerCase()}});
+        let findUser = await Users.findOne({where:{userName: userName}});
 
         if(findUser && await bcrypt.compare(password, findUser.password)){
             const token = await jwt.sign(
@@ -65,6 +65,7 @@ router.post('/login', async(req, res) => {
             }
             res.cookie("auth-token", token);
             res.cookie("userId", findUser.id)
+            
             return res.status(200).json(mapData);
         }
         res.status(400).send("The username or password is incorrect.");

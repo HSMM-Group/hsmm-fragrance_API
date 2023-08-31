@@ -15,8 +15,9 @@ passport.use(
         jwtFromRequest: cookieExtract,
         secretOrKey   : process.env.TOKEN_KEY
     },
+    
     function (jwtPayload, done) {
-        return done(null, jwtPayload);
+      return done(null, jwtPayload);
     }
   )
 );
