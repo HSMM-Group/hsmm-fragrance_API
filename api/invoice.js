@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const Invoices = require('../models/invoice')(sequelize, DataTypes);
 const InvoicesItems = require('../models/invoiceitems')(sequelize, DataTypes);
 const Customers = require('../models/customer')(sequelize, DataTypes);
+const Users = require('../models/user')(sequelize, DataTypes);
 const Employees = require('../models/employee')(sequelize, DataTypes);
 const Product = require('../models/product')(sequelize, DataTypes);
 
@@ -17,8 +18,10 @@ Invoices.hasMany(InvoicesItems, { foreignKey: "invoiceId" });
 InvoicesItems.belongsTo(Invoices, { foreignKey: "invoiceId" });
 Product.hasMany(InvoicesItems, { foreignKey: "productId" });
 InvoicesItems.belongsTo(Product, { foreignKey: "productId" });
-Employees.hasOne(Invoices, { foreignKey: "cashierId" });
-Invoices.belongsTo(Employees, { foreignKey: "cashierId" });
+Users.hasOne(Employees, { foreignKey: "userId" });
+Employees.belongsTo(Users, { foreignKey: "userId" });
+Users.hasOne(Invoices, { foreignKey: "cashierId" });
+Invoices.belongsTo(Users, { foreignKey: "cashierId" });
 router.get('/invoice', async (req, res) => {
     try {
         const { kw, count, skip, startDate, endDate } = req.query;
@@ -34,7 +37,9 @@ router.get('/invoice', async (req, res) => {
             },
             include:[
                 {model: Customers, attributes:["id", "name"]}, 
-                {model: Employees, attributes:["id", "firstName", "lastName"]}
+                {model: Users, attributes:["id"], include:[
+                    {model: Employees, attributes:["id", "firstName", "lastName"]}
+                ]}
             ],
             order: [["id", "DESC"]],
             offset: Number(skip) * Number(count) | null,
@@ -54,7 +59,9 @@ router.get('/invoiceDetail', async (req, res) => {
             include:[
                 {model: InvoicesItems, include:[{model: Product, attributes:["name", "coverImage"]}]}, 
                 {model: Customers, attributes:["name", "phone", "address"]},
-                {model: Employees, attributes: ["firstName", "lastName"]}
+                {model: Users, attributes:["id"], include:[
+                    {model: Employees, attributes:["id", "firstName", "lastName"]}
+                ]}
             ]
         })
         if(findDetails?.cancelBy > 0){

@@ -15,9 +15,9 @@ module.exports = {
     await queryInterface.addConstraint('Invoices', {
       fields: ['cashierId'],
       type: 'foreign key',
-      name: 'invoice_employee_association',
+      name: 'invoice_user_association',
       references: {
-        table: 'Employees',
+        table: 'Users',
         field: 'id'
       }
     })
@@ -36,9 +36,9 @@ module.exports = {
     await queryInterface.removeConstraint('Invoices', {
       fields: ['cashierId'],
       type: 'foreign key',
-      name: 'invoice_employee_association',
+      name: 'invoice_user_association',
       references: {
-        table: 'Employees',
+        table: 'Users',
         field: 'id'
       }
     })

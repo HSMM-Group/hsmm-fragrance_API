@@ -39,6 +39,9 @@ module.exports = {
       totalAmount: {
         type: Sequelize.DOUBLE
       },
+      changeAmount:{
+        type: Sequelize.DOUBLE
+      },
       saleNote: {
         type: Sequelize.STRING
       },
@@ -53,6 +56,9 @@ module.exports = {
       },
       cancelNote: {
         type: Sequelize.STRING
+      },
+      closeSale:{
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

@@ -24,11 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     tax: DataTypes.DOUBLE,
     taxAmount: DataTypes.DOUBLE,
     totalAmount: DataTypes.DOUBLE,
+    changeAmount: DataTypes.DOUBLE,
     saleNote: DataTypes.STRING,
     cashierId: DataTypes.INTEGER,
     status: DataTypes.INTEGER,
     cancelBy: DataTypes.INTEGER,
-    cancelNote: DataTypes.STRING
+    cancelNote: DataTypes.STRING,
+    closeSale: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Invoice',

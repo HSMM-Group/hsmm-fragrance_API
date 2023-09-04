@@ -27,6 +27,9 @@ module.exports = {
       qty: {
         type: Sequelize.INTEGER
       },
+      amount: {
+        type: Sequelize.DOUBLE
+      },
       isFree: {
         type: Sequelize.INTEGER
       },

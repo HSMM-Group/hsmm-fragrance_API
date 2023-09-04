@@ -25,7 +25,7 @@ router.post('/register', async(req, res) =>{
         const createUser = await Users.create({
             userName: userName.toLowerCase(),
             password: encryptedPassword,
-            userType: userType
+            userType: userType, //1-employee, 2-customer
         })
         //Create token
         // const token = await jwt.sign(
@@ -56,7 +56,7 @@ router.post('/login', async(req, res) => {
                 {userId: findUser.id, userName}, 
                 process.env.TOKEN_KEY,
                 {
-                    expiresIn:"20m"
+                    expiresIn:"20h"
                 }
             )
             const mapData = {

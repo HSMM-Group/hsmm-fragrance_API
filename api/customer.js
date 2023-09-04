@@ -29,16 +29,16 @@ router.get('/customer', async (req, res) => {
 router.post('/customer', sh.uploadImage().single('file'), async (req, res) => {
     try {
         const {name, phone, email, gender, countryId, address, image} = req.body;
-
+        console.log(countryId);
         if (!name) {
             return res.status(400).json(resData(false, 'Customer name is required.', null));
         }
         const addCust = await Customers.create({
             name: name,
-            phone: phone | 0,
+            phone: phone,
             email: email,
             gender: gender,
-            countryId: countryId | 1,
+            countryId: countryId,
             address: address,
             image: image
         });

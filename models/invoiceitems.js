@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     currencyId: DataTypes.INTEGER,
     rate: DataTypes.DOUBLE,
     qty: DataTypes.INTEGER,
+    amount: DataTypes.DOUBLE,
     isFree: DataTypes.INTEGER
   }, {
     sequelize,
