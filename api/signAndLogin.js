@@ -6,7 +6,9 @@ const Op = Sequelize.Op;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const Users = require('../models/user')(sequelize, DataTypes);
-
+const Employees = require('../models/employee')(sequelize, DataTypes);
+Users.hasOne(Employees, { foreignKey: "userId" });
+Employees.belongsTo(Users, { foreignKey: "userId" });
 router.post('/register', async(req, res) =>{
     try{
         const {userName, password, userType} = req.body;
@@ -49,11 +51,11 @@ router.post('/login', async(req, res) => {
         if(!(userName && password)){
             return res.status(400).send("All input is required.");
         }
-        let findUser = await Users.findOne({where:{userName: userName}});
+        let findUser = await Users.findOne({where:{userName: userName}, include:[{model: Employees}]});
 
         if(findUser && await bcrypt.compare(password, findUser.password)){
             const token = await jwt.sign(
-                {userId: findUser.id, userName}, 
+                {userId: findUser.id, userName, employeeName: findUser.Employee.firstName},
                 process.env.TOKEN_KEY,
                 {
                     expiresIn:"20h"
@@ -65,6 +67,7 @@ router.post('/login', async(req, res) => {
             }
             res.cookie("auth-token", token);
             res.cookie("userId", findUser.id)
+            res.cookie("employee", findUser.Employee.firstName)
             
             return res.status(200).json(mapData);
         }

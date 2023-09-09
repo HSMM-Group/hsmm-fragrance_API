@@ -44,9 +44,17 @@ router.post('/pos', async(req, res) => {
                 isFree: m.isFree
             }
         })
-        const addItem = await InvoicesItems.bulkCreate(mapItems);
-        res.status(200).json(addItem);
+        await InvoicesItems.bulkCreate(mapItems);
+        const mapData = {
+            id: invAdd.id,
+            invoiceNo: invAdd.invoiceNo,
+            cashierId: decoded.userId,
+            employeeName: decoded.employeeName,
+            createdAt: invAdd.createdAt,
+        }
+        res.status(200).json(resData(true, 'Add invoice successfully.', mapData, 0));
     })
+    
 })
 
 module.exports = router;
