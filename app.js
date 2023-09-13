@@ -10,10 +10,10 @@ const notFound = require('./middleware/not-found');
 const api = require("./api");
 const signAndLogin = require("./api/signAndLogin")
 const swagger = require('./config/swagger');
-const passport = require('passport');
 const path = require('path');
 const multer = require("multer");
 const cookieParser = require('cookie-parser');
+const authMiddleware = require('./middleware/auth');
 require("dotenv").config();
 require("./auth/passport");
 
@@ -52,8 +52,9 @@ const rootPath = path.join(__dirname, '/images');
 app.use('/files', express.static(rootPath));
 
 
-// app.use('/api', passport.authenticate("jwt", { session: false }), api);
-app.use('/api', api);
+
+app.use('/api', authMiddleware, api);
+// app.use('/api', api);
 app.use('/api-start', signAndLogin);
 app.use('/api-docs', swagger.swaggerUi.serve, swagger.swaggerUi.setup(swagger.swaggerFunc()))
 

@@ -1,20 +1,19 @@
-// const jwt = require('jsonwebtoken');
-// const config = process.env;
+const passport = require('passport');
 
-// const verifyToken = (req, res, next) =>{
-//     const token = req.body.token || req.query.token || req.headers['x-access-token']
-//     if(!token){
-//         return res.status(403).send('A token is required.')
-//     }
+const authMiddleware = (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        // Clear the cookie if the user is unauthorized
+        res.clearCookie("auth-token");
+        res.clearCookie("userId");
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      req.user = user;
+      next();
+    })(req, res, next);
+};
 
-//     try {
-//         const decoded = jwt.verify(token, config.TOKEN_KEY);
-//         req.user = decoded;
-//     } catch (err) {
-//          return res.status(401).send("Invalid token."); 
-//     }
-
-//     return next();
-// }
-
-// module.exports = verifyToken;
+module.exports = authMiddleware;

@@ -58,7 +58,7 @@ router.post('/login', async(req, res) => {
                 {userId: findUser.id, userName, employeeName: findUser.Employee.firstName},
                 process.env.TOKEN_KEY,
                 {
-                    expiresIn:"20h"
+                    expiresIn:"2h"
                 }
             )
             const mapData = {
