@@ -13,7 +13,7 @@ router.get('/currency', async(req, res) =>{
             where: { name: { [Op.substring]: kw || '' } },
             order: [["id", "DESC"]],
             offset: Number(skip) * Number(count),
-            limit: Number(count),
+            limit: Number(count) > 0?Number(count):null,
         })
         res.status(200).json(resData(true, 'Get category successfully.', findAll.rows, findAll.count));
     }catch (err){
@@ -23,7 +23,7 @@ router.get('/currency', async(req, res) =>{
 
 router.post('/currency', async(req, res) =>{
     try{ 
-        const { name, rate} = req.body;
+        const { name, rate, icon} = req.body;
         if(!(name)){
             return res.status(400).json(resData(false, 'Currency Name is required.', null));
         }
@@ -34,6 +34,7 @@ router.post('/currency', async(req, res) =>{
         const addCate = await Currencies.create({
             name: name,
             rate: rate | 0,
+            icon: icon
         })
         res.status(200).json(resData(true,'Add currency successfully.', addCate));
     }catch (err){
@@ -43,7 +44,7 @@ router.post('/currency', async(req, res) =>{
 
 router.put('/currency', async(req, res) =>{
     try{
-        const {id, name, rate} = req.body;
+        const {id, name, rate, icon} = req.body;
         if(!(name)){
             return res.status(400).json(resData(false, 'Currency Name is required.', null));
         }
@@ -54,7 +55,8 @@ router.put('/currency', async(req, res) =>{
         const updateCate = await Currencies.update(
             {
                 name: name,
-                rate: rate
+                rate: rate,
+                icon: icon
             },
             {
                 where:{id:id}
