@@ -1,6 +1,6 @@
 'use strict';
 const { Sequelize, DataTypes } = require('sequelize');
-// const logger = require('./logger');
+const mysql2 = require('mysql2');
 require('dotenv').config();
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -9,6 +9,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: 'mysql',
+    dialectModule: mysql2,
     operatorsAliases: 0,
     logging: true,
     dialectOptions: {

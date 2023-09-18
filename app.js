@@ -25,7 +25,7 @@ app.use(
   cors({
     allowHeaders: '*',
     allowMethods: '*',
-    origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'https://fragrance.hsmm-mining.com/'],
     credentials: true,
   })
 );
